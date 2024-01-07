@@ -1,0 +1,36 @@
+.todo-container {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  width: 100%;
+}
+
+.checkbox-input {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.todo-text,
+.todo-text:focus {
+  width: 100%;
+  border: none;
+  font-size: 1.6rem;
+  outline: none;
+}
+
+.todo-icon {
+  fill: currentColor;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+}
+
+.completed-task * {
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+/* .completed-task article svg {
+  cursor: not-allowed;
+} */

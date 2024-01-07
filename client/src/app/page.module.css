@@ -1,0 +1,9 @@
+.main {
+  padding: 6rem;
+  min-height: 100vh;
+}
+
+.card {
+  width: 35%;
+  max-height: 80vh;
+}
