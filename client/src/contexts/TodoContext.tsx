@@ -52,7 +52,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   const completeTodo = async (id: string, updatedStatus: Partial<ITodo>) => {
     try {
       const response = await axios.put(
-        `${PATHS.completeTask}/${id}`,
+        `${PATHS.updateStatus}/${id}`,
         updatedStatus
       );
       console.log(response.data);

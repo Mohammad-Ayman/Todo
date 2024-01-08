@@ -29,11 +29,7 @@ class TaskController {
 
     if (updatedTaskIndex !== -1) {
       TaskController.tasks[updatedTaskIndex].completed = !req.body.completed;
-      res.json({
-        id: TaskController.tasks[updatedTaskIndex].id,
-        text: TaskController.tasks[updatedTaskIndex].text,
-        completed: TaskController.tasks[updatedTaskIndex].completed,
-      });
+      res.json(TaskController.tasks[updatedTaskIndex]);
     } else {
       res.status(404).json({ error: "Task not found" });
     }

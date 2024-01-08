@@ -19,7 +19,7 @@ const TodoElement: React.FC<Props> = ({ todoElement }) => {
 
   const handleChecked = () => {
     setIsCompleted((prevState) => !prevState);
-    completeTodo(id, { completed: !isCompleted });
+    completeTodo(id, { completed: isCompleted });
   };
 
   const handleEdit = () => {
