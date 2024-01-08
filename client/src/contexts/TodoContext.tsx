@@ -1,6 +1,7 @@
 // "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import connection from "@/api/connection";
 import { ITodo } from "@/typings/interfaces";
 import { PATHS } from "@/api/constants";
 
@@ -29,7 +30,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getAllTasks = async () => {
     try {
-      const response = await axios.get(PATHS.getAllTasks as string);
+      const response = await connection.get(PATHS.getAllTasks as string);
       console.log("response", response.data);
       // Update state with the tasks received from the server
       setTodos(response.data);
@@ -45,7 +46,10 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   const addTodo = async (newTodo: ITodo) => {
     console.log("newTodo", newTodo);
     try {
-      const response = await axios.post(PATHS.addNewTask as string, newTodo);
+      const response = await connection.post(
+        PATHS.addNewTask as string,
+        newTodo
+      );
       // Update state with the new todo received from the server
       setTodos((prevTodos) => [...prevTodos, response.data]);
     } catch (error: any) {
@@ -60,7 +64,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const completeTodo = async (id: string, updatedStatus: Partial<ITodo>) => {
     try {
-      const response = await axios.put(
+      const response = await connection.put(
         `${PATHS.updateStatus}/${id}`,
         updatedStatus
       );
@@ -82,7 +86,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateTodo = async (id: string, updatedTodo: Partial<ITodo>) => {
     try {
-      const response = await axios.put(
+      const response = await connection.put(
         `${PATHS.updateTask}/${id}`,
         updatedTodo
       );
@@ -104,7 +108,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   const deleteTodo = async (id: string) => {
     try {
-      await axios.delete(`${PATHS.deleteTask}/${id}`);
+      await connection.delete(`${PATHS.deleteTask}/${id}`);
 
       // Update state by removing the deleted todo
       setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
