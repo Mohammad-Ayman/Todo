@@ -34,18 +34,27 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
       // Update state with the tasks received from the server
       setTodos(response.data);
     } catch (error: any) {
-      throw new Error(`Error fetching tasks: ${error.message}`);
+      console.error("Error adding todo:", error);
+
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        throw new Error(`ERROR: ${error.response.data.error}`);
+      }
     }
   };
   const addTodo = async (newTodo: ITodo) => {
     console.log("newTodo", newTodo);
     try {
       const response = await axios.post(PATHS.addNewTask as string, newTodo);
-      console.log(response);
       // Update state with the new todo received from the server
       setTodos((prevTodos) => [...prevTodos, response.data]);
     } catch (error: any) {
-      throw new Error(`Error adding todo: ${error.message}`);
+      console.error("Error adding todo:", error);
+
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        throw new Error(`ERROR: ${error.response.data.error}`);
+      }
     }
   };
 
@@ -62,7 +71,12 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       );
     } catch (error: any) {
-      throw new Error(`Error updating todo: ${error.message}`);
+      console.error("Error adding todo:", error);
+
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        throw new Error(`ERROR: ${error.response.data.error}`);
+      }
     }
   };
 
@@ -80,10 +94,14 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       );
     } catch (error: any) {
-      throw new Error(`Error updating todo: ${error.message}`);
+      console.error("Error adding todo:", error);
+
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        throw new Error(`ERROR: ${error.response.data.error}`);
+      }
     }
   };
-
   const deleteTodo = async (id: string) => {
     try {
       await axios.delete(`${PATHS.deleteTask}/${id}`);
@@ -91,7 +109,12 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
       // Update state by removing the deleted todo
       setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
     } catch (error: any) {
-      throw new Error(`Error deleting todo: ${error.message}`);
+      console.error("Error adding todo:", error);
+
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        throw new Error(`ERROR: ${error.response.data.error}`);
+      }
     }
   };
 
