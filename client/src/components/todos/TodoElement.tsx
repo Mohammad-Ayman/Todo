@@ -1,25 +1,25 @@
 "use client";
 import { useState } from "react";
-import { Todo } from "@/typings/types";
+import { ITodo } from "@/typings/interfaces";
 import { useTodoContext } from "@/contexts/TodoContext";
 import { useModal } from "@/contexts/ModalContext";
 import styles from "@/components/todos/styles/todoElement.module.css";
 
 interface Props {
-  todoElement: Todo;
+  todoElement: ITodo;
 }
 
 const TodoElement: React.FC<Props> = ({ todoElement }) => {
   const { openModal, setTaskDetails } = useModal();
-  const { updateTodo } = useTodoContext();
-  const { checked, value, id } = todoElement;
+  const { completeTodo } = useTodoContext();
+  const { completed, text, id } = todoElement;
 
-  const [isCompleted, setIsCompleted] = useState(checked);
+  const [isCompleted, setIsCompleted] = useState(completed);
   const markCompleted = isCompleted ? styles["completed-task"] : "";
 
   const handleChecked = () => {
-    updateTodo(id, { checked: !checked });
     setIsCompleted((prevState) => !prevState);
+    completeTodo(id, { completed: !isCompleted });
   };
 
   const handleEdit = () => {
@@ -44,7 +44,7 @@ const TodoElement: React.FC<Props> = ({ todoElement }) => {
       <article>
         <input
           type="text"
-          value={value}
+          value={text}
           title="todo element"
           placeholder="New Todo"
           className={`${styles["todo-text"]}`}

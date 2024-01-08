@@ -7,38 +7,48 @@ import { useModal } from "@/contexts/ModalContext";
 import styles from "@/components/todos/styles/todoModal.module.css";
 
 const TodoModal = () => {
-  const taskContentRef = useRef<HTMLTextAreaElement | null>(null);
-  const [error, setError] = useState(false);
   const { isOpen, closeModal, taskDetails } = useModal();
   const { addTodo, deleteTodo, updateTodo } = useTodoContext();
+  const taskContentRef = useRef<HTMLTextAreaElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setError(false);
+    setError(null);
   }, [isOpen]);
 
-  const handleSave = () => {
-    if (taskContentRef.current && taskContentRef.current.value !== "") {
-      if (taskDetails) {
-        // If task has an ID, update existing task
-        updateTodo(taskDetails.id, { value: taskContentRef.current.value });
+  const handleSave = async () => {
+    try {
+      if (taskContentRef.current && taskContentRef.current.value !== "") {
+        if (taskDetails) {
+          // If task has an ID, update existing task
+          await updateTodo(taskDetails.id, {
+            text: taskContentRef.current.value,
+          });
+        } else {
+          await addTodo({
+            id: String(Date.now()),
+            text: taskContentRef.current.value,
+            completed: false,
+          });
+        }
+        closeModal(); // Close modal if no error
+      } else {
+        setError("Todo Text Is Required");
       }
-      //else add new task
-      else {
-        addTodo({
-          id: String(Date.now()),
-          value: taskContentRef.current.value,
-          checked: false,
-        });
-      }
-      closeModal();
-    } else setError(true);
+    } catch (error: any) {
+      setError(error.message);
+    }
   };
 
-  const handleDelete = () => {
-    if (taskDetails) {
-      deleteTodo(taskDetails.id);
+  const handleDelete = async () => {
+    try {
+      if (taskDetails) {
+        await deleteTodo(taskDetails.id);
+      }
+      closeModal(); // Close modal if no error
+    } catch (error: any) {
+      setError(error.message);
     }
-    closeModal();
   };
 
   return (
@@ -47,7 +57,12 @@ const TodoModal = () => {
         <h3>Add Todo</h3>
         <button onClick={closeModal}>&times;</button>
       </div>
-      {error && <p style={{ color: "red" }}>Typing New Task Is Required</p>}
+      {error && (
+        <p style={{ color: "red", fontSize: "1rem", marginBottom: "1rem" }}>
+          {error}
+        </p>
+      )}
+
       <div className={styles["modal-body"]}>
         <textarea
           placeholder="Type your new task..."
@@ -55,7 +70,7 @@ const TodoModal = () => {
           cols={25}
           className={styles["textarea"]}
           ref={taskContentRef}
-          defaultValue={taskDetails?.value ?? ""}
+          defaultValue={taskDetails?.text ?? ""}
         ></textarea>
       </div>
       <div className={styles["modal-footer"]}>
@@ -65,4 +80,5 @@ const TodoModal = () => {
     </Modal>
   );
 };
+
 export default TodoModal;

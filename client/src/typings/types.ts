@@ -5,6 +5,6 @@ export type DynamicAttributes = {
 
 export type Todo = {
   id: string;
-  checked: boolean;
-  value: string;
+  completed: boolean;
+  text: string;
 };
